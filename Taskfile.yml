@@ -20,13 +20,19 @@ tasks:
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - task: build
-      - ./build/dev/{{.NAME}}
+      - cmake --build --preset=dev -t run-exe
 
   test:
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - task: build
       - ctest --preset=dev
+
+  docs:
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - cmake --build --preset=dev -t docs
+      - cmake --build --preset=dev -t docs-serve
 
   clean:
     dir: '{{.USER_WORKING_DIR}}'

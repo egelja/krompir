@@ -11,7 +11,7 @@ include(Catch)
 
 # ---- Tests ----
 
-add_executable(krompir_test source/krompir_test.cpp)
+add_executable(krompir_test src/krompir_test.cpp)
 target_link_libraries(
     krompir_test PRIVATE
     krompir_lib
