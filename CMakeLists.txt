@@ -10,6 +10,13 @@ project(
     LANGUAGES CXX
 )
 
+if(CMAKE_BUILD_TYPE MATCHES Debug)
+  set(DEBUG 1)
+else()
+  set(DEBUG 0)
+endif()
+configure_file(src/config.h.in config.h)
+  
 include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
 
@@ -26,6 +33,7 @@ target_include_directories(
     krompir_lib ${warning_guard}
     PUBLIC
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>"
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/>"
 )
 
 target_compile_features(krompir_lib PUBLIC cxx_std_20)
@@ -47,6 +55,9 @@ target_compile_features(krompir_exe PRIVATE cxx_std_20)
 
 target_link_libraries(krompir_exe PRIVATE krompir_lib)
 target_link_libraries(krompir_exe PRIVATE spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+
+find_package(argparse REQUIRED)
+target_link_libraries(krompir_exe PRIVATE argparse::argparse)
 
 # ---- Install rules ----
 

@@ -8,15 +8,14 @@
  */
 #include "logging.hpp"
 
+#include "config.h"
+
 #include <spdlog/cfg/env.h>
 #include <spdlog/common.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
-#define BACKTRACE_LENGTH 32
-
 namespace krompir::logging {
-
 /**
  * @brief Initialize logging for this project.
  */
@@ -27,7 +26,13 @@ init()
     spdlog::set_default_logger(spdlog::stderr_color_mt("main"));
 
     // Set log level
+#if DEBUG()
+    spdlog::set_level(spdlog::level::debug);
+#else
     spdlog::set_level(spdlog::level::info);
+#endif
+
+    // Check if log level changed in environment
     spdlog::cfg::load_env_levels();
 
     // Change logger pattern

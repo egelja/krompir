@@ -29,6 +29,12 @@ tasks:
       - task: build
       - ./build/dev/{{.NAME}}
 
+  run-v:
+    env:
+      SPDLOG_LEVEL: trace
+    cmds:
+      - task: run
+
   test:
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
