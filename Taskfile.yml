@@ -1,0 +1,33 @@
+version: '3'
+
+env:
+  NAME: krompir
+
+tasks:
+  init:
+    dir: '{{.USER_WORKING_DIR}}'
+    preconditions:
+      - test -f CMakeUserPresets.json
+    cmds:
+      - cmake --preset=dev
+
+  build:
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - cmake --build --preset=dev
+
+  run:
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - task: build
+      - ./build/dev/{{.NAME}}
+
+  test:
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - task: build
+      - ctest --preset=dev
+
+  default:
+    cmds:
+      - task: run
