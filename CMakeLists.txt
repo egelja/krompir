@@ -17,13 +17,13 @@ include(cmake/variables.cmake)
 
 add_library(
     krompir_lib OBJECT
-    source/lib.cpp
+    src/lib.cpp
 )
 
 target_include_directories(
     krompir_lib ${warning_guard}
     PUBLIC
-    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/source>"
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>"
 )
 
 target_compile_features(krompir_lib PUBLIC cxx_std_20)
@@ -33,7 +33,7 @@ target_link_libraries(krompir_lib PRIVATE fmt::fmt)
 
 # ---- Declare executable ----
 
-add_executable(krompir_exe source/main.cpp)
+add_executable(krompir_exe src/main.cpp)
 add_executable(krompir::exe ALIAS krompir_exe)
 
 set_property(TARGET krompir_exe PROPERTY OUTPUT_NAME krompir)

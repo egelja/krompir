@@ -28,6 +28,11 @@ tasks:
       - task: build
       - ctest --preset=dev
 
+  clean:
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - cmake --build --preset=dev -t clean
+
   default:
     cmds:
       - task: run
