@@ -10,6 +10,9 @@ class Recipe(ConanFile):
 
     def requirements(self):
         self.requires("fmt/9.1.0")
+        self.requires("spdlog/1.11.0")
+        
+        self.requires("imgui/1.89.4")
 
     def build_requirements(self):
         self.test_requires("catch2/3.3.1")

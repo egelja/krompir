@@ -18,6 +18,8 @@ include(cmake/variables.cmake)
 add_library(
     krompir_lib OBJECT
     src/lib.cpp
+    # Utilities
+    src/logging.cpp
 )
 
 target_include_directories(
@@ -31,6 +33,9 @@ target_compile_features(krompir_lib PUBLIC cxx_std_20)
 find_package(fmt REQUIRED)
 target_link_libraries(krompir_lib PRIVATE fmt::fmt)
 
+find_package(spdlog REQUIRED)
+target_link_libraries(krompir_lib PRIVATE spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
+
 # ---- Declare executable ----
 
 add_executable(krompir_exe src/main.cpp)
@@ -41,6 +46,7 @@ set_property(TARGET krompir_exe PROPERTY OUTPUT_NAME krompir)
 target_compile_features(krompir_exe PRIVATE cxx_std_20)
 
 target_link_libraries(krompir_exe PRIVATE krompir_lib)
+target_link_libraries(krompir_exe PRIVATE spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
 
 # ---- Install rules ----
 

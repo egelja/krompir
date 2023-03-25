@@ -4,6 +4,11 @@ env:
   NAME: krompir
 
 tasks:
+  deps:
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - conan install . -s build_type=Debug -b missing -pr cpp20 -pr:b cpp20
+    
   init:
     dir: '{{.USER_WORKING_DIR}}'
     preconditions:
@@ -13,6 +18,8 @@ tasks:
 
   build:
     dir: '{{.USER_WORKING_DIR}}'
+    preconditions:
+      - test -f CMakeUserPresets.json
     cmds:
       - cmake --build --preset=dev
 
@@ -20,7 +27,7 @@ tasks:
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - task: build
-      - cmake --build --preset=dev -t run-exe
+      - ./build/dev/{{.NAME}}
 
   test:
     dir: '{{.USER_WORKING_DIR}}'
