@@ -9,6 +9,7 @@
 #pragma once
 
 // We'll do any log level selecting at runtime
+#include <string>
 #undef SPDLOG_ACTIVE_LEVEL
 #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_TRACE
 
@@ -19,34 +20,48 @@
 #endif
 
 // Now include the header
+#include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 
-namespace krompir::logging {
+namespace krompir {
+
+namespace logging {
 
 /**
  * @brief Initialize logging for this project.
  */
-void init();
+std::shared_ptr<spdlog::logger> init();
 
-} // namespace krompir::logging
+inline auto
+get_logger(const std::string& name) noexcept
+{
+    if (auto logger = spdlog::get(name))
+        return logger;
+
+    return spdlog::stderr_color_mt(name);
+}
+
+} // namespace logging
+
+} // namespace krompir
 
 // Wrap the SPDLOG macros in ones we like.
 // NOLINTBEGIN
-#define log_t(...) SPDLOG_TRACE(__VA_ARGS__) /* NOLINT */
-#define log_d(...) SPDLOG_DEBUG(__VA_ARGS__) /* NOLINT */
-#define log_i(...) SPDLOG_INFO(__VA_ARGS__)  /* NOLINT */
-#define log_w(...) SPDLOG_WARN(__VA_ARGS__)  /* NOLINT */
+#define log_t(...) SPDLOG_LOGGER_TRACE(LOG, __VA_ARGS__)
+#define log_d(...) SPDLOG_LOGGER_DEBUG(LOG, __VA_ARGS__)
+#define log_i(...) SPDLOG_LOGGER_INFO(LOG, __VA_ARGS__)
+#define log_w(...) SPDLOG_LOGGER_WARN(LOG, __VA_ARGS__)
 
 // Want to dump backtrace for these two
 #define log_e(...)                                                                     \
   do {                                                                                 \
-    SPDLOG_ERROR(__VA_ARGS__); /* NOLINT */                                            \
+    SPDLOG_LOGGER_ERROR(LOG, __VA_ARGS__);                                             \
     spdlog::dump_backtrace();                                                          \
   } while (0)
 
 #define log_c(...)                                                                     \
   do {                                                                                 \
-    SPDLOG_CRITICAL(__VA_ARGS__); /* NOLINT */                                         \
+    SPDLOG_LOGGER_CRITICAL(LOG, __VA_ARGS__);                                          \
     spdlog::dump_backtrace();                                                          \
   } while (0)
 

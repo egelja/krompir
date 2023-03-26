@@ -1,0 +1,26 @@
+// NOLINTBEGIN(modernize-macro-to-enum,cppcoreguidelines-macro-usage)
+
+/* If we are in debug mode.
+ *
+ * Why is this a function macro?
+ * It prevents silent undefined macro errors.
+ *
+ * https://stackoverflow.com/a/3160643
+ */
+#cmakedefine01 DEBUG()
+
+// Version info
+/* clang-format off */
+/* NOLINTBEGIN */
+#define VERSION_MAJOR @krompir_VERSION_MAJOR@
+#define VERSION_MINOR @krompir_VERSION_MINOR@
+#define VERSION_PATCH @krompir_VERSION_PATCH@
+
+#define VERSION "@krompir_VERSION@"
+/* clang-format on */
+/* NOLINTEND */
+
+// Backtrace length
+#define BACKTRACE_LENGTH 32
+
+// NOLINTEND(modernize-macro-to-enum,cppcoreguidelines-macro-usage)

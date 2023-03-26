@@ -16,10 +16,11 @@
 #include <spdlog/spdlog.h>
 
 namespace krompir::logging {
+
 /**
  * @brief Initialize logging for this project.
  */
-void
+std::shared_ptr<spdlog::logger>
 init()
 {
     // Change logger to stderr
@@ -37,13 +38,16 @@ init()
 
     // Change logger pattern
     // [%Y-%m-%d %H:%M:%S.%e] [%n] [%l] [%s:%#] %v
-    spdlog::set_pattern("%^[%Y-%m-%d %H:%M:%S.%e] [%10s:%-4#] [%=10n] - [%=8l] %v%$");
+    spdlog::set_pattern("%^[%Y-%m-%d %H:%M:%S.%e] [%25s:%-4#] [%=8l] - [%n] %v%$");
 
     // Enable backtrace buffer
     spdlog::enable_backtrace(BACKTRACE_LENGTH);
 
     // Send our first message
-    log_i("Logging initialized successfully");
+    SPDLOG_INFO("Logging initialized successfully");
+
+    // Return root logger
+    return spdlog::get("main");
 }
 
 } // namespace krompir::logging

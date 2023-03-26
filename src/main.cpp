@@ -1,5 +1,5 @@
 #include "config.h"
-#include "lib.hpp"
+#include "gui/gui.hpp"
 #include "logging.hpp"
 
 #include <argparse/argparse.hpp>
@@ -12,7 +12,7 @@ int
 main(int argc, char* argv[])
 {
     // Setup logging
-    krompir::logging::init();
+    const auto LOG = krompir::logging::init();
 
     // Argument parsing
     argparse::ArgumentParser program(
@@ -52,8 +52,8 @@ main(int argc, char* argv[])
     else if (verbosity >= 1) // info -> debug
         spdlog::set_level(spdlog::level::debug);
 
-    log_d("DEBUG!");
-    log_t("TRACE!");
+    // Start
+    krompir::gui::start();
 
     return 0;
 }
