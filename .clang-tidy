@@ -29,7 +29,7 @@ Checks: "\
 WarningsAsErrors: false
 AnalyzeTemporaryDtors: false
 FormatStyle: file
-HeaderFilterRegex: "(^config.h|.*\.hpp)$"
+HeaderFilterRegex: "(^config.h|.*\\.hpp)$"
 CheckOptions:
   llvm-else-after-return.WarnOnConditionVariables: "false"
   modernize-loop-convert.MinConfidence: reasonable
