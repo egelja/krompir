@@ -1,0 +1,11 @@
+--- build.cfg.in
++++ build.cfg.in
+@@ -20,7 +20,7 @@ USE_THREADS=@wxUSE_THREADS_bf@
+ USE_AUI=@wxUSE_AUI_bf@
+ USE_GUI=@wxUSE_GUI_bf@
+ USE_HTML=@wxUSE_HTML_bf@
+-USE_MEDIA=@wxUSE_MEDIA_bf@
++USE_MEDIA=@wxUSE_MEDIACTRL_bf@
+ USE_OPENGL=@wxUSE_OPENGL_bf@
+ USE_QA=@wxUSE_DEBUGREPORT_bf@
+ USE_PROPGRID=@wxUSE_PROPGRID_bf@
