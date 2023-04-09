@@ -9,16 +9,28 @@ project(
     HOMEPAGE_URL "https://github.com/MrAwesomeRocks/krompir"
     LANGUAGES CXX
 )
+  
+include(cmake/project-is-top-level.cmake)
+include(cmake/variables.cmake)
+include(cmake/functions.cmake)
+
+# ---- Configuration File ----
 
 if(CMAKE_BUILD_TYPE MATCHES Debug)
   set(DEBUG 1)
 else()
   set(DEBUG 0)
 endif()
+
 configure_file(src/config.h.in config.h)
-  
-include(cmake/project-is-top-level.cmake)
-include(cmake/variables.cmake)
+
+# ---- Load Deps ----
+
+find_package(fmt REQUIRED)
+find_package(spdlog REQUIRED)
+find_package(argparse REQUIRED)
+
+add_subdirectory(third-party)
 
 # ---- Declare library ----
 
@@ -38,26 +50,33 @@ target_include_directories(
 
 target_compile_features(krompir_lib PUBLIC cxx_std_20)
 
-find_package(fmt REQUIRED)
 target_link_libraries(krompir_lib PRIVATE fmt::fmt)
-
-find_package(spdlog REQUIRED)
 target_link_libraries(krompir_lib PRIVATE spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
 
 # ---- Declare executable ----
 
-add_executable(krompir_exe src/main.cpp)
+add_executable(krompir_exe
+  src/main.cpp
+  src/gui/gui.cpp
+)
 add_executable(krompir::exe ALIAS krompir_exe)
 
+target_compile_features(krompir_exe PRIVATE cxx_std_20)
 set_property(TARGET krompir_exe PROPERTY OUTPUT_NAME krompir)
 
-target_compile_features(krompir_exe PRIVATE cxx_std_20)
-
+# Libs
 target_link_libraries(krompir_exe PRIVATE krompir_lib)
+
+target_link_libraries(krompir_exe PRIVATE fmt::fmt)
 target_link_libraries(krompir_exe PRIVATE spdlog::spdlog $<$<BOOL:${MINGW}>:ws2_32>)
 
-find_package(argparse REQUIRED)
 target_link_libraries(krompir_exe PRIVATE argparse::argparse)
+
+target_link_libraries_system(
+  krompir_exe
+  PRIVATE
+  wx::net wx::core wx::base
+)
 
 # ---- Install rules ----
 

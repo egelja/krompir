@@ -19,7 +19,7 @@
 #  define SPDLOG_FUNCTION __PRETTY_FUNCTION__
 #endif
 
-// Now include the header
+// Now include the headers
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/spdlog.h>
 

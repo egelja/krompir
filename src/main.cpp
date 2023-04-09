@@ -53,7 +53,7 @@ main(int argc, char* argv[])
         spdlog::set_level(spdlog::level::debug);
 
     // Start
-    krompir::gui::start();
+    return krompir::gui::run();
 
-    return 0;
+    //    return 0;
 }
