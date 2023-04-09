@@ -157,10 +157,11 @@ jobs:
       if: runner.os == 'Linux'
       run: sudo apt-get install libgtk-3-dev libglew-dev libexpat-dev build-essential
 
+    # TODO update when conan 2.04 is released
     - name: Install dependencies
       shell: bash
       run: |
-        pip3 install conan
+        pip3 install git+https://github.com/conan-io/conan.git
         bash < .github/scripts/conan-profile.sh
         conan install . -b missing
 
