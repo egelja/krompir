@@ -1,0 +1,10 @@
+# Spell checking
+codespell
+
+# Docs
+jinja2
+Pygments
+
+# Deps
+# TODO update when conan 2.04 is released
+git+https://github.com/conan-io/conan.git
