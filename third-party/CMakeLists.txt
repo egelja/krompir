@@ -1,16 +1,14 @@
 cmake_minimum_required(VERSION 3.14)
 
-# --- wxWidgets ---
-
 block()
-  # static linkage
-  set(wxBUILD_SHARED OFF) 
-  set(wxUSE_EXPAT "builtin")
-  
   # No linters
   set(CMAKE_CXX_CLANG_TIDY "")
   set(CMAKE_CXX_CPPCHECK "")
 
+  # Extensions on
+  set(CMAKE_CXX_EXTENSIONS ON)
+
+  # Less CXX flags
   if(WIN32)
     if(MINGW)
       set(CMAKE_CXX_FLAGS
@@ -42,6 +40,12 @@ block()
        -fstack-clash-protection"
     )
   endif()
+
+  # --- wxWidgets ---
+  
+  # static linkage
+  set(wxBUILD_SHARED OFF)
+  set(wxUSE_EXPAT "builtin")
 
   # Patch file
   execute_process(
