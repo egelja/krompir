@@ -25,7 +25,8 @@ Checks: "\
   -hicpp-no-array-decay,\
   -modernize-concat-nested-namespaces,\
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
-  -modernize-use-trailing-return-type,"
+  -modernize-use-trailing-return-type,\
+  -cppcoreguidelines-owning-memory"
 WarningsAsErrors: false
 AnalyzeTemporaryDtors: false
 FormatStyle: file
@@ -65,8 +66,8 @@ CheckOptions:
   readability-inconsistent-declaration-parameter-name.Strict: "true"
   readability-qualified-auto.AddConstToQualified: "true"
   readability-redundant-access-specifiers.CheckFirstDeclaration: "true"
-  readability-identifier-naming.AbstractClassCase: "lower_case"
-  readability-identifier-naming.ClassCase: "lower_case"
+  readability-identifier-naming.AbstractClassCase: "CamelCase"
+  readability-identifier-naming.ClassCase: "CamelCase"
   readability-identifier-naming.ClassConstantCase: "lower_case"
   readability-identifier-naming.ClassMemberCase: "lower_case"
   readability-identifier-naming.ClassMethodCase: "lower_case"
