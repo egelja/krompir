@@ -14,7 +14,7 @@ namespace gui {
 /*
  * @brief Start the GUI.
  */
-int run();
+int main(int argc, char** argv);
 
 } // namespace gui
 

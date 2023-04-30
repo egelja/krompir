@@ -12,6 +12,7 @@ int
 main(int argc, char* argv[])
 {
     // Setup logging
+    // NOLINTNEXTLINE(readability-identifier-naming)
     const auto LOG = krompir::logging::init();
 
     // Argument parsing
@@ -52,8 +53,6 @@ main(int argc, char* argv[])
     else if (verbosity >= 1) // info -> debug
         spdlog::set_level(spdlog::level::debug);
 
-    // Start
-    return krompir::gui::run();
-
-    //    return 0;
+    // Transfer control to GUI
+    return krompir::gui::main(argc, argv);
 }

@@ -26,7 +26,9 @@ Checks: "\
   -modernize-concat-nested-namespaces,\
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
   -modernize-use-trailing-return-type,\
-  -cppcoreguidelines-owning-memory"
+  -cppcoreguidelines-owning-memory,
+  -hicpp-named-parameter,
+  -readability-named-parameter"
 WarningsAsErrors: false
 AnalyzeTemporaryDtors: false
 FormatStyle: file
