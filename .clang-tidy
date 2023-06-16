@@ -26,9 +26,13 @@ Checks: "\
   -modernize-concat-nested-namespaces,\
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,\
   -modernize-use-trailing-return-type,\
-  -cppcoreguidelines-owning-memory,
-  -hicpp-named-parameter,
-  -readability-named-parameter"
+  -cppcoreguidelines-owning-memory,\
+  -hicpp-named-parameter,\
+  -readability-named-parameter,\
+  -readability-uppercase-literal-suffix,\
+  -hicpp-uppercase-literal-suffix,\
+  -bugprone-easily-swappable-parameters,\
+  -cppcoreguidelines-avoid-const-or-ref-data-members"
 WarningsAsErrors: false
 AnalyzeTemporaryDtors: false
 FormatStyle: file
@@ -61,6 +65,7 @@ CheckOptions:
   readability-simplify-boolean-expr.ChainedConditionalReturn: "true"
   readability-simplify-boolean-expr.ChainedConditionalAssignment: "true"
   readability-uniqueptr-delete-release.PreferResetCall: "true"
+  readability-function-cognitive-complexity.IgnoreMacros: "true"
   cppcoreguidelines-init-variables.MathHeader: "<cmath>"
   cppcoreguidelines-narrowing-conversions.PedanticMode: "true"
   readability-else-after-return.WarnOnUnfixable: "true"

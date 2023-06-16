@@ -20,7 +20,4 @@
 /* clang-format on */
 /* NOLINTEND */
 
-// Backtrace length
-#define BACKTRACE_LENGTH 32
-
 // NOLINTEND(modernize-macro-to-enum,cppcoreguidelines-macro-usage)

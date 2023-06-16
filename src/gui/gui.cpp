@@ -1,21 +1,18 @@
 #include "gui.hpp"
 
+#include "common.hpp"
 #include "gui/constants.hpp"
 #include "gui/utils.hpp"
-#include "logging.hpp"
 
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
+#  include <wx/cmdline.h>
 #  include <wx/wx.h>
 #endif
 
 // Make sure we have everything enabled in wx that we need
 static_assert(wxUSE_MENUBAR && wxUSE_STATUSBAR, "Missing required wxWidgets features");
-
-// Grab our logger
-// NOLINTNEXTLINE(cert-err58-cpp)
-static const auto LOG = spdlog::stderr_color_mt("gui");
 
 namespace krompir {
 namespace gui {
@@ -52,31 +49,64 @@ public:
         SetStatusText("Welcome to Krompir!");
     }
 
-    // event handlers (these functions should _not_ be virtual)
+    /*
+     * event handlers (these functions should _not_ be virtual or static)
+     */
+    // NOLINTBEGIN(readability-convert-member-functions-to-static)
+
+    /**
+     * Called when the "quit" button is pressed in the menu, or the frame is told to
+     * exit.
+     */
     void
-    on_quit(wxCommandEvent& WXUNUSED(event))
+    on_quit(wxCommandEvent& event)
     {
+        UNUSED(event);
+
         // true is to force the frame to close
         Close(true);
     }
 
+    /**
+     * Called when the about button is pressed or an about command is sent to the
+     * window.
+     */
     void
-    on_about(wxCommandEvent& WXUNUSED(event))
+    on_about(wxCommandEvent& event)
     {
+        UNUSED(event);
+
         wxMessageBox(
             wxString::Format(
                 "Welcome to Krompir!\n"
                 "\n"
                 "Application Information:\n"
                 " - %s\n"
+                " - %s\n"
                 " - %s\n",
-                wxVERSION_STRING, wxGetOsDescription()
+                wxVERSION_STRING,
+                wxGetOsDescription()
             ),
             "About Krompir",
             wxOK | wxICON_INFORMATION, // NOLINT(hicpp-signed-bitwise)
             this
         );
     }
+
+    /**
+     * Called when the window is sitting idle, to perform short background tasks
+     * without interrupting the user.
+     */
+    void
+    on_idle(wxIdleEvent& event)
+    {
+        UNUSED(event);
+
+        // Process log queue
+        logging::process();
+    }
+
+    // NOLINTEND(readability-convert-member-functions-to-static)
 
 private:
     // any class wishing to process wxWidgets events must use this macro
@@ -89,6 +119,7 @@ private:
 wxBEGIN_EVENT_TABLE(MainFrame, wxFrame) // NOLINT
 /**/ EVT_MENU(Control::QUIT, MainFrame::on_quit)
 /**/ EVT_MENU(Control::ABOUT, MainFrame::on_about)
+/**/ EVT_IDLE(MainFrame::on_idle)
 wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
@@ -99,9 +130,11 @@ public:
     // override base class virtuals
     // ----------------------------
 
-    // this one is called on application startup and is a good place for the app
-    // initialization (doing it here and not in the ctor allows to have an error
-    // return: if OnInit() returns false, the application terminates)
+    /**
+     * Called on startup, allows us to do initialization.
+     *
+     * If we return false, the app exists.
+     */
     bool
     OnInit() override
     {
@@ -122,6 +155,45 @@ public:
         // application would exit immediately.
         return true;
     }
+
+    /**
+     * Called on app exit, for us to do cleanup and return exit status.
+     *
+     * Right now, just want to process remaining log messages.
+     */
+    int
+    OnExit() override
+    {
+        // Make sure everything got logged
+        logging::process();
+
+        return 0;
+    }
+
+    /**
+     * Called before parsing command line.
+     *
+     * We parse command line arguments elsewhere, so clear the command line.
+     */
+    void
+    OnInitCmdLine(wxCmdLineParser& parser) override
+    {
+        parser.SetCmdLine(0, static_cast<char**>(nullptr));
+    }
+
+    /**
+     * Called when command line is parsed.
+     *
+     * We parse command line arguments elsewhere, so simply ignore
+     */
+    bool
+    OnCmdLineParsed(wxCmdLineParser& parser) override
+    {
+        UNUSED(parser);
+
+        // Do nothing
+        return true;
+    }
 };
 
 // ----------------------------------------------------------------------------
@@ -134,9 +206,9 @@ int
 main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 {
     // Log some info about libraries and OS
-    log_i("Starting GUI!");
-    log_d("wxWidgets v{}", get_wx_version_string());
-    log_d("{}", wxGetOsDescription().utf8_string());
+    log_i(gui, "Starting GUI!");
+    log_d(gui, "wxWidgets v{}", get_wx_version_string());
+    log_d(gui, "{}", wxGetOsDescription().utf8_string());
 
     // Turn off debug support in release builds
     wxDISABLE_DEBUG_SUPPORT();

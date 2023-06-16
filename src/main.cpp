@@ -1,8 +1,8 @@
-#include "config.h"
+#include "common.hpp"
 #include "gui/gui.hpp"
-#include "logging.hpp"
 
 #include <argparse/argparse.hpp>
+#include <binlog/default_session.hpp>
 #include <fmt/core.h>
 
 #include <iostream>
@@ -11,10 +11,6 @@
 int
 main(int argc, char* argv[])
 {
-    // Setup logging
-    // NOLINTNEXTLINE(readability-identifier-naming)
-    const auto LOG = krompir::logging::init();
-
     // Argument parsing
     argparse::ArgumentParser program(
         "krompir", VERSION, argparse::default_arguments::help
@@ -48,10 +44,14 @@ main(int argc, char* argv[])
     }
 
     // Update verbosity
+    binlog::Severity log_level = binlog::Severity::info;
+
     if (verbosity >= 2) // info -> debug -> trace
-        spdlog::set_level(spdlog::level::trace);
+        log_level = binlog::Severity::trace;
     else if (verbosity >= 1) // info -> debug
-        spdlog::set_level(spdlog::level::debug);
+        log_level = binlog::Severity::debug;
+
+    binlog::default_session().setMinSeverity(log_level);
 
     // Transfer control to GUI
     return krompir::gui::main(argc, argv);

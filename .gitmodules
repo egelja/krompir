@@ -1,3 +1,6 @@
 [submodule "third-party/wxWidgets"]
 	path = third-party/wxWidgets
 	url = git@github.com:wxWidgets/wxWidgets.git
+[submodule "third-party/binlog"]
+	path = third-party/binlog
+	url = git@github.com:erenon/binlog.git

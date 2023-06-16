@@ -43,9 +43,12 @@ block()
 
   # --- wxWidgets ---
   
-  # static linkage
+  # linkage
   set(wxBUILD_SHARED OFF)
   set(wxUSE_EXPAT "builtin")
+
+  # turn this on since we have a modern MinGW
+  set(wxUSE_DBGHELP ON)
 
   # Patch file
   execute_process(
@@ -57,4 +60,12 @@ block()
 
   # Compile
   add_subdirectory(wxWidgets)
+endblock()
+
+block()
+  set(BINLOG_BUILD_EXAMPLES OFF)
+  set(BINLOG_BUILD_UNIT_TESTS OFF)
+  set(BINLOG_BUILD_INTEGRATION_TESTS OFF)
+  
+  add_subdirectory(binlog)
 endblock()
