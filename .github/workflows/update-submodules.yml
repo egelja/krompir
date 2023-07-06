@@ -24,7 +24,7 @@ jobs:
         if git commit -am"Update submodules (automated)
 
         $(git submodule --quiet foreach \
-          'latest_tag="$(git describe --tags --abbrev=0 origin/HEAD)"
+          'latest_tag="$(gh api 'repos/{owner}/{repo}/releases/latest' -q '.tag_name')"
           current_tag="$(git describe --tags)"
           if [ "$current_tag" != "$latest_tag" ]; then
             git checkout --quiet "$latest_tag"
