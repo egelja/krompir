@@ -24,10 +24,11 @@ jobs:
         if git commit -am"Update submodules (automated)
 
         $(git submodule --quiet foreach \
-          'tag="$(git describe --tags --abbrev=0 origin/HEAD)"
-          if [ "$(git describe --tags)" != "$tag" ]; then
-            git checkout --quiet "$tag"
-            echo "- $name: \`$(git describe --tags)\` ==> \`$tag\`"
+          'latest_tag="$(git describe --tags --abbrev=0 origin/HEAD)"
+          current_tag="$(git describe --tags)
+          if [ "$current_tag" != "$latest_tag" ]; then
+            git checkout --quiet "$latest_tag"
+            echo "- $name: \`$current_tag\` ==> \`$latest_tag\`"
           fi')"
         then
           git show --raw
