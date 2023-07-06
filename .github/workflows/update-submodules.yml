@@ -22,7 +22,7 @@ jobs:
         git config --global user.email noreply@github.com
         
         # Make changes
-        if git commit -S -am"Update submodules (automated)
+        if git commit -am"Update submodules (automated)
 
         $(git submodule --quiet foreach \
           'tag="$(git describe --tags --abbrev=0 origin/HEAD)"
