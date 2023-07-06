@@ -36,6 +36,8 @@ jobs:
         
         # Write commit information to file
         git log -1 --pretty=%B > /tmp/commit-msg
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
