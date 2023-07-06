@@ -17,6 +17,11 @@ jobs:
 
     - name: Update submodules
       run: |
+        # Set up git
+        git config --global user.name GitHub
+        git config --global user.email noreply@github.com
+        
+        # Make changes
         if git commit -S -am"Update submodules (automated)
 
         $(git submodule --quiet foreach \
@@ -29,5 +34,14 @@ jobs:
           git show --raw
         fi
         
+        # Write commit information to file
+        git log -1 --pretty=%B > /tmp/commit-msg
+        
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v5
+      with:
+        branch: deps/submodule-update
+        title: "[Deps] Automated Submodule Update"
+        body-path: /tmp/commit-msg
+        assignees: egelja
+        reviewers: egelja
