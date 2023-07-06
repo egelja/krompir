@@ -27,5 +27,7 @@ jobs:
           fi')"
         then
           git show --raw
-          git push
         fi
+        
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v5
