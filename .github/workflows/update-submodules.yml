@@ -14,13 +14,12 @@ jobs:
       with:
         submodules: true
         fetch-depth: 0
+        
+    - name: Set up git user
+      uses: fregante/setup-git-user@v2
 
     - name: Update submodules
       run: |
-        # Set up git
-        git config --global user.name GitHub
-        git config --global user.email noreply@github.com
-        
         # Make changes
         if git commit -am"Update submodules (automated)
 
