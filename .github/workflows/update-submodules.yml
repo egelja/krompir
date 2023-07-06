@@ -27,7 +27,7 @@ jobs:
           'tag="$(git describe --tags --abbrev=0 origin/HEAD)"
           if [ "$(git describe --tags)" != "$tag" ]; then
             git checkout --quiet "$tag"
-            echo "$name" "$tag"
+            echo "- $name: \`$(git describe --tags)\` ==> \`$tag\`"
           fi')"
         then
           git show --raw
