@@ -3,4 +3,4 @@
 	url = git@github.com:wxWidgets/wxWidgets.git
 [submodule "third-party/binlog"]
 	path = third-party/binlog
-	url = git@github.com:erenon/binlog.git
+	url = git@github.com:morganstanley/binlog.git
