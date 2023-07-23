@@ -52,10 +52,23 @@ block()
 
   # Patch file
   execute_process(
-    COMMAND ${CMAKE_COMMAND}
-    -Din_file:FILEPATH=third-party/wxWidgets/build/cmake/build.cfg.in
-    -Dpatch_file:FILEPATH=third-party/_patch/001-wxWidgets-undef-var.patch
-    -P cmake/PatchFile.cmake
+    COMMAND
+    ${CMAKE_COMMAND}
+    -Din_file:FILEPATH=wxWidgets/build/cmake/build.cfg.in
+    -Dout_file:FILEPATH=${CMAKE_CURRENT_BINARY_DIR}/wxWidgets/build/cmake/build.cfg.in
+    -Dpatch_file:FILEPATH=_patch/001-wxWidgets-undef-var.patch
+    -P ../cmake/PatchFile.cmake
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
+
+  execute_process(
+    COMMAND
+    ${CMAKE_COMMAND}
+    -Din_file:FILEPATH=wxWidgets/CMakeLists.txt
+    -Dout_file:FILEPATH=${CMAKE_CURRENT_BINARY_DIR}/wxWidgets/CMakeLists.txt
+    -Dpatch_file:FILEPATH=_patch/002-wxWidgets-cmake-version.patch
+    -P ../cmake/PatchFile.cmake
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   )
 
   # Compile
@@ -66,6 +79,16 @@ block()
   set(BINLOG_BUILD_EXAMPLES OFF)
   set(BINLOG_BUILD_UNIT_TESTS OFF)
   set(BINLOG_BUILD_INTEGRATION_TESTS OFF)
+
+  execute_process(
+    COMMAND
+    ${CMAKE_COMMAND}
+    -Din_file:FILEPATH=binlog/CMakeLists.txt
+    -Dout_file:FILEPATH=${CMAKE_CURRENT_BINARY_DIR}/binlog/CMakeLists.txt
+    -Dpatch_file:FILEPATH=_patch/003-binlog-cmake-version.patch
+    -P ../cmake/PatchFile.cmake
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+  )
   
   add_subdirectory(binlog)
 endblock()

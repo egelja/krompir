@@ -18,6 +18,9 @@ class Recipe(ConanFile):
     def build_requirements(self):
         self.test_requires("catch2/3.3.1")
 
+        # Dependencies for binlog
+        self.test_requires("benchmark/1.8.0")
+
     def configure(self):
         pass
 

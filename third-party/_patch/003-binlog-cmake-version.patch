@@ -1,0 +1,8 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,2 +1,2 @@
+-cmake_minimum_required(VERSION 3.1)
++cmake_minimum_required(VERSION 3.1...3.27)
+ project(binlog VERSION 0.1.0 LANGUAGES CXX)
+
+ #---------------------------

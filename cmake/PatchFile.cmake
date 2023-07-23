@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.14)
+
 # use GNU Patch from any platform
 # https://github.com/scivision/cmake-patch-file/blob/main/cmake/PatchFile.cmake
 
@@ -20,7 +22,7 @@ if(NOT PATCH)
   message(FATAL_ERROR "Did not find GNU Patch")
 endif()
 
-if(EXISTS ${in_file}.cmake_patched)
+if(EXISTS "${in_file}.cmake_patched")
   message("The file ${in_file} has already been patched.")
 else()
   if(DEFINED ${out_file})
@@ -40,6 +42,6 @@ else()
   if(NOT ret EQUAL 0)
     message(FATAL_ERROR "Failed to apply patch ${patch_file} to ${in_file} with ${PATCH}")
   else()
-    file(TOUCH ${in_file}.cmake_patched)
+    file(TOUCH "${in_file}.cmake_patched")
   endif()
 endif()
