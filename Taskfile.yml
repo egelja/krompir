@@ -8,7 +8,7 @@ tasks:
     dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - conan install . -s build_type=Debug -b missing -pr cpp20 -pr:b cpp20
-    
+
   init:
     dir: '{{.USER_WORKING_DIR}}'
     preconditions:
@@ -30,10 +30,9 @@ tasks:
       - ./build/dev/{{.NAME}}
 
   run-v:
-    env:
-      SPDLOG_LEVEL: trace
     cmds:
-      - task: run
+      - task: build
+      - ./build/dev/{{.NAME}} -v
 
   test:
     dir: '{{.USER_WORKING_DIR}}'
@@ -54,4 +53,4 @@ tasks:
 
   default:
     cmds:
-      - task: run
+      - task: run-v
