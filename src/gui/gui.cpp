@@ -3,6 +3,7 @@
 #include "common.hpp"
 #include "gui/constants.hpp"
 #include "gui/utils.hpp"
+#include "logging.hpp"
 
 #include <wx/wxprec.h>
 
@@ -21,20 +22,19 @@ namespace gui {
 
 // Define a new frame type: this is going to be our main frame
 class MainFrame : public wxFrame {
-public:
-    // ctor(s)
-    explicit MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
+    /**
+     * Create the menu bar for this frame and set it.
+     */
+    void
+    create_menu_bar_()
     {
-        // set the frame icon
-        SetIcon(wxICON(sample));
-
-        // create a menu bar
+        // Create our "File" menu
         auto* file_menu = new wxMenu();
-        file_menu->Append(Control::QUIT, "E&xit\tAlt-X", "Quit this program");
+        file_menu->Append(CONTROL_QUIT, "E&xit\tAlt-X", "Quit this program");
 
         // the "About" item should be in the help menu
         auto* help_menu = new wxMenu();
-        help_menu->Append(Control::ABOUT, "&About\tF1", "Show about dialog");
+        help_menu->Append(CONTROL_ABOUT, "&About\tF1", "Show about dialog");
 
         // now append the freshly created menu to the menu bar...
         auto* menu_bar = new wxMenuBar();
@@ -43,36 +43,40 @@ public:
 
         // ... and attach this menu bar to the frame
         SetMenuBar(menu_bar);
+    }
+
+public:
+    // ctor(s)
+    explicit MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
+    {
+        // set the frame icon
+        SetIcon(wxICON(sample));
+
+        // create a menu bar
+        create_menu_bar_();
 
         // create a status bar just for fun (by default with 1 pane only)
         CreateStatusBar(2);
         SetStatusText("Welcome to Krompir!");
+
+        // And bind events
+        Bind(
+            wxEVT_MENU, [this](wxCommandEvent&) { Close(true); }, CONTROL_QUIT
+        );
+        Bind(wxEVT_MENU, &MainFrame::on_about_, this, CONTROL_ABOUT);
     }
 
+private:
     /*
      * event handlers (these functions should _not_ be virtual or static)
      */
-    // NOLINTBEGIN(readability-convert-member-functions-to-static)
-
-    /**
-     * Called when the "quit" button is pressed in the menu, or the frame is told to
-     * exit.
-     */
-    void
-    on_quit(wxCommandEvent& event)
-    {
-        UNUSED(event);
-
-        // true is to force the frame to close
-        Close(true);
-    }
 
     /**
      * Called when the about button is pressed or an about command is sent to the
      * window.
      */
     void
-    on_about(wxCommandEvent& event)
+    on_about_(wxCommandEvent& event)
     {
         UNUSED(event);
 
@@ -82,9 +86,10 @@ public:
                 "\n"
                 "Application Information:\n"
                 " - %s\n"
-                " - %s\n"
+                " - Binlog @ %s\n"
                 " - %s\n",
                 wxVERSION_STRING,
+                BINLOG_VERSION,
                 wxGetOsDescription()
             ),
             "About Krompir",
@@ -92,35 +97,7 @@ public:
             this
         );
     }
-
-    /**
-     * Called when the window is sitting idle, to perform short background tasks
-     * without interrupting the user.
-     */
-    void
-    on_idle(wxIdleEvent& event)
-    {
-        UNUSED(event);
-
-        // Process log queue
-        logging::process();
-    }
-
-    // NOLINTEND(readability-convert-member-functions-to-static)
-
-private:
-    // any class wishing to process wxWidgets events must use this macro
-    wxDECLARE_EVENT_TABLE(); // NOLINT
 };
-
-// the event tables connect the wxWidgets events with the functions (event
-// handlers) which process them. It can be also done at run-time, but for the
-// simple menu events like this the static method is much simpler.
-wxBEGIN_EVENT_TABLE(MainFrame, wxFrame) // NOLINT
-/**/ EVT_MENU(Control::QUIT, MainFrame::on_quit)
-/**/ EVT_MENU(Control::ABOUT, MainFrame::on_about)
-/**/ EVT_IDLE(MainFrame::on_idle)
-wxEND_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 
@@ -149,6 +126,9 @@ public:
         // and show it (the frames, unlike simple controls, are not shown when
         // created initially)
         frame->Show(true);
+
+        // Bind the idle event to allow us to process logs without blocking the user
+        Bind(wxEVT_IDLE, [](wxIdleEvent&) { logging::process(); });
 
         // success: wxApp::OnRun() will be called which will enter the main message
         // loop and the application will run. If we returned false here, the

@@ -20,4 +20,6 @@
 /* clang-format on */
 /* NOLINTEND */
 
+#define BINLOG_VERSION "4cd8f78"
+
 // NOLINTEND(modernize-macro-to-enum,cppcoreguidelines-macro-usage)
