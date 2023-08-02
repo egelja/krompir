@@ -3,10 +3,8 @@
 
 #include <argparse/argparse.hpp>
 #include <binlog/default_session.hpp>
-#include <fmt/core.h>
 
 #include <iostream>
-#include <string>
 
 int
 main(int argc, char* argv[])
@@ -54,5 +52,5 @@ main(int argc, char* argv[])
     binlog::default_session().setMinSeverity(log_level);
 
     // Transfer control to GUI
-    return krompir::gui::main(argc, argv);
+    return gui::main(argc, argv);
 }

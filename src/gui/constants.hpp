@@ -1,3 +1,5 @@
+#include "utils/gui.hpp" // useful for gui things
+
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP

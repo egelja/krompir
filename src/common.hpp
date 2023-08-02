@@ -1,7 +1,15 @@
+#pragma once
+
 #include "config.h"
 #include "logging.hpp"
+#include "utils/utils.hpp"
 
-#include <fmt/format.h>
+#include <fmt/core.h>
 #include <fmt/xchar.h>
 
-#define UNUSED(x) (void)(x)
+#include <string>
+
+#define UNUSED(x)             (void)(x)
+
+#define __STRINGIFY_HELPER(x) #x
+#define STRINGIFY(x)          __STRINGIFY_HELPER(x)

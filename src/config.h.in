@@ -1,3 +1,5 @@
+#pragma once
+
 // NOLINTBEGIN(modernize-macro-to-enum,cppcoreguidelines-macro-usage)
 
 /* If we are in debug mode.
@@ -21,5 +23,12 @@
 /* NOLINTEND */
 
 #define BINLOG_VERSION "4cd8f78"
+
+// App names
+#ifdef NDEBUG
+#  define APP_NAME "Krompir"
+#else
+#  define APP_NAME "kROMPIR"
+#endif
 
 // NOLINTEND(modernize-macro-to-enum,cppcoreguidelines-macro-usage)

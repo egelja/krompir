@@ -55,7 +55,12 @@ target_link_libraries(krompir_lib PRIVATE binlog)
 
 add_executable(krompir_exe
   src/main.cpp
+
+  # Main GUI
   src/gui/gui.cpp
+
+  # Frames
+  src/gui/frames/main.cpp
 )
 add_executable(krompir::exe ALIAS krompir_exe)
 

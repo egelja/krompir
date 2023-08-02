@@ -42,8 +42,6 @@
 #include <string>
 #include <thread>
 
-namespace krompir {
-
 namespace logging {
 
 namespace detail {
@@ -200,26 +198,24 @@ process()
 
 } // namespace logging
 
-} // namespace krompir
-
 // Logging Macros
 // Adapted from binlog, licensed under Apache2
 // NOLINTBEGIN
 #define log_t(category, ...)                                                           \
-    BINLOG_TRACE_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_TRACE_WC(logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_d(category, ...)                                                           \
-    BINLOG_DEBUG_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_DEBUG_WC(logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_i(category, ...)                                                           \
-    BINLOG_INFO_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_INFO_WC(logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_w(category, ...)                                                           \
-    BINLOG_WARN_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_WARN_WC(logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_e(category, ...)                                                           \
-    BINLOG_ERROR_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_ERROR_WC(logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_c(category, ...)                                                           \
-    BINLOG_CRITICAL_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_CRITICAL_WC(logging::thread_local_writer(), category, __VA_ARGS__)
 // NOLINTEND

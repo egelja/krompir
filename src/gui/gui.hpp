@@ -1,7 +1,5 @@
 #pragma once
 
-namespace krompir {
-
 namespace gui {
 
 /*
@@ -10,5 +8,3 @@ namespace gui {
 int main(int argc, char** argv);
 
 } // namespace gui
-
-} // namespace krompir

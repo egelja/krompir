@@ -3,7 +3,7 @@
 #include "common.hpp"
 #include "frames/frames.hpp"
 #include "logging.hpp"
-#include "utils.hpp"
+#include "utils/utils.hpp"
 
 #include <wx/wxprec.h>
 
@@ -12,7 +12,6 @@
 #  include <wx/wx.h>
 #endif
 
-namespace krompir {
 namespace gui {
 
 /**
@@ -37,7 +36,12 @@ public:
             return false;
 
         // create the main application window
-        auto* frame = new MainFrame("Krompir");
+        auto* frame = new MainFrame(APP_NAME);
+        if (frame == nullptr) {
+            log_e(gui, "Could not allocate our main frame");
+            log_c(main, "Out of memory!");
+            return false;
+        }
 
         // and show it (the frames, unlike simple controls, are not shown when
         // created initially)
@@ -103,7 +107,9 @@ main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 {
     // Log some info about libraries and OS
     log_i(gui, "Starting GUI!");
-    log_d(gui, "wxWidgets v{}", get_wx_version_string());
+    log_d(gui, "wxWidgets v{}", utils::get_wx_version_string());
+    log_d(gui, "{fmt} v{}", ::utils::fmt_version_str());
+    log_d(gui, "Binlog @ {}", BINLOG_VERSION);
     log_d(gui, "{}", wxGetOsDescription().utf8_string());
 
     // Turn off debug support in release builds
@@ -121,5 +127,3 @@ main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 }
 
 } // namespace gui
-
-} // namespace krompir
