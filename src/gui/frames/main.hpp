@@ -12,7 +12,7 @@
 namespace gui {
 
 /**
- * @brief The main frame for this project.
+ * The main frame for this project.
  *
  * This is where the application will be spending most of its time.
  */
@@ -24,7 +24,7 @@ class MainFrame : public wxFrame {
 
 public:
     /**
-     * @brief Create a new main frame.
+     * Create a new main frame.
      *
      * Should really ever be called once.
      */
