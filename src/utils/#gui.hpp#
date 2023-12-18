@@ -1,12 +1,15 @@
 #pragma once
 
+
+
+#include <string>
+
 namespace krompir {
 namespace gui {
+namespace utils {
 
-/**
- * Start the GUI.
- */
-int main(int argc, char** argv);
 
+
+} // namespace utils
 } // namespace gui
 } // namespace krompir

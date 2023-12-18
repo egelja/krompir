@@ -16,12 +16,6 @@ include(cmake/functions.cmake)
 
 # ---- Configuration File ----
 
-if(CMAKE_BUILD_TYPE MATCHES Debug)
-  set(DEBUG 1)
-else()
-  set(DEBUG 0)
-endif()
-
 configure_file(src/config.h.in config.h)
 
 # ---- Load Deps ----
@@ -37,6 +31,7 @@ add_library(
     krompir_lib OBJECT
     src/lib.cpp
     # Utilities
+    src/logging.cpp
 )
 
 target_include_directories(

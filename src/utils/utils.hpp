@@ -1,33 +1,16 @@
 #pragma once
 
-#include "logging.hpp"
+#include <wx/wxprec.h>
 
-#include <fmt/core.h>
-#include <fmt/xchar.h>
+#ifndef WX_PRECOMP
+#  include <wx/wx.h>
+#endif
+
+#include <fmt/format.h>
 
 #include <string>
-#include <typeinfo>
 
-/**
- * @brief A safe version of new.
- *
- * Guaranteed to never return nullptr.
- */
-template <class T, class... Args>
-inline T*
-new_s(Args... args)
-{
-    auto* ptr = new T(std::forward<Args>(args)...);
-    if (ptr == nullptr) {
-        log_e(main, "Could not allocate a new {}", typeid(T).name());
-        log_c(main, "Out of memory!");
-
-        abort();
-    }
-
-    return ptr;
-}
-
+namespace krompir {
 namespace utils {
 
 /**
@@ -43,4 +26,21 @@ fmt_version_str()
     return fmt::format("{}.{}.{}", major, minor, patch);
 }
 
+/**
+ * Get the version of wx as a nice string.
+ */
+inline constexpr std::string
+get_wx_version_string()
+{
+    return (                                 //
+        wxSTRINGIZE(wxMAJOR_VERSION)         //
+        "." wxSTRINGIZE(wxMINOR_VERSION)     //
+        "." wxSTRINGIZE(wxRELEASE_NUMBER)    //
+#ifdef wxSUBRELEASE_NUMBER                   //
+        "." wxSTRINGIZE(wxSUBRELEASE_NUMBER) //
+#endif                                       //
+    );
+}
+
 } // namespace utils
+} // namespace krompir

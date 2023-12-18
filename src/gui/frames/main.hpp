@@ -9,6 +9,7 @@
 #  include <wx/wx.h>
 #endif
 
+namespace krompir {
 namespace gui {
 
 /**
@@ -41,3 +42,4 @@ private:
 };
 
 } // namespace gui
+} // namespace krompir

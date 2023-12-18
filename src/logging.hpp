@@ -42,6 +42,7 @@
 #include <string>
 #include <thread>
 
+namespace krompir {
 namespace logging {
 
 namespace detail {
@@ -51,29 +52,6 @@ static constexpr auto LOG_CONSOLE_SEVERITY = binlog::Severity::debug;
 #else
 static constexpr auto LOG_CONSOLE_SEVERITY = binlog::Severity::error;
 #endif
-
-inline const char*
-severity_to_color(const binlog::Severity& severity)
-{
-    switch (severity) {
-        case binlog::Severity::trace:
-            return "\x1b[38;5;7m"; // Gray
-        case binlog::Severity::debug:
-            return "\x1b[36m"; // Cyan;
-        case binlog::Severity::info:
-            return "\x1b[32m"; // Green
-        case binlog::Severity::warning:
-            return "\x1b[1;33m"; // Bold Yellow
-        case binlog::Severity::error:
-            return "\x1b[1;31m"; // Bold red
-        case binlog::Severity::critical:
-            return "\x1b[1;37m\x1b[41m"; // Bold white on red
-        case binlog::Severity::no_logs:
-            return "\x1b[0m"; // Reset
-        default:
-            return "";
-    }
-}
 
 /**
  * Convert a binlog stream to text, and color it.
@@ -86,6 +64,9 @@ class ColoredTextOutputStream {
     binlog::PrettyPrinter printer_;
 
 public:
+    /**
+     * Create a new ColoredTextOutputStream.
+     */
     explicit ColoredTextOutputStream(
         std::ostream& out,
         std::string event_format = "%S %C [%d] %n %m (%G:%L)\n",
@@ -94,28 +75,17 @@ public:
         out_(out), printer_(std::move(event_format), std::move(date_format))
     {}
 
-    ColoredTextOutputStream&
-    write(const char* data, std::streamsize size)
-    {
-        const binlog::Range range{data, data + size}; // NOLINT(*-pointer-arithmetic)
-        binlog::RangeEntryStream entry_stream(range);
-
-        while (const binlog::Event* event = event_stream_.nextEvent(entry_stream)) {
-            out_ << severity_to_color(event->source->severity);
-            printer_.printEvent(
-                out_, *event, event_stream_.writerProp(), event_stream_.clockSync()
-            );
-            out_ << "\x1b[0m"; // Reset
-        }
-
-        return *this;
-    }
+    /**
+     * Write data to the stream.
+     */
+    ColoredTextOutputStream& write(const char* data, std::streamsize size);
 };
 
-// https://binlog.org/UserGuide.html#multiple-output
 /**
  * Write complete binlog output to `binary`,
  * and also write error and above events to `text` - as text.
+ *
+ * https://binlog.org/UserGuide.html#multiple-output
  */
 class MultiOutputStream {
     std::ostream& binary_;
@@ -123,6 +93,9 @@ class MultiOutputStream {
     binlog::EventFilter filter_;
 
 public:
+    /**
+     * Create a new MultiOutputStream.
+     */
     MultiOutputStream(std::ostream& binary, std::ostream& text) :
         binary_(binary),
         text_(text, "%S %C [%d] %n %m (%G:%L)\n"),
@@ -131,19 +104,10 @@ public:
         })
     {}
 
-    MultiOutputStream&
-    write(const char* buffer, std::streamsize size)
-    {
-        binary_.write(buffer, size);
-
-        try {
-            filter_.writeAllowed(buffer, static_cast<size_t>(size), text_);
-        } catch (const std::runtime_error& ex) {
-            std::cerr << "Failed to convert buffer to text: " << ex.what() << "\n";
-        }
-
-        return *this;
-    }
+    /**
+     * Write data to the stream.
+     */
+    MultiOutputStream& write(const char* data, std::streamsize size);
 };
 
 } // namespace detail
@@ -177,7 +141,7 @@ thread_local_writer()
 {
     static thread_local binlog::SessionWriter writer(
         binlog::default_session(),
-        1u << 20u,              // queue capacity
+        KROMPIR_LOG_QUEUE_SIZE, // queue capacity
         0,                      // writer id
         this_thread_id_string() // writer name
     );
@@ -197,25 +161,26 @@ process()
 }
 
 } // namespace logging
+} // namespace krompir
 
 // Logging Macros
 // Adapted from binlog, licensed under Apache2
 // NOLINTBEGIN
 #define log_t(category, ...)                                                           \
-    BINLOG_TRACE_WC(logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_TRACE_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_d(category, ...)                                                           \
-    BINLOG_DEBUG_WC(logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_DEBUG_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_i(category, ...)                                                           \
-    BINLOG_INFO_WC(logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_INFO_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_w(category, ...)                                                           \
-    BINLOG_WARN_WC(logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_WARN_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_e(category, ...)                                                           \
-    BINLOG_ERROR_WC(logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_ERROR_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
 
 #define log_c(category, ...)                                                           \
-    BINLOG_CRITICAL_WC(logging::thread_local_writer(), category, __VA_ARGS__)
+    BINLOG_CRITICAL_WC(krompir::logging::thread_local_writer(), category, __VA_ARGS__)
 // NOLINTEND

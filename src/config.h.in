@@ -9,26 +9,33 @@
  *
  * https://stackoverflow.com/a/3160643
  */
-#cmakedefine01 DEBUG()
+#ifdef NDEBUG
+#  define DEBUG() 0
+#else
+#  define DEBUG() 1
+#endif
 
 // Version info
 /* clang-format off */
 /* NOLINTBEGIN */
-#define VERSION_MAJOR @krompir_VERSION_MAJOR@
-#define VERSION_MINOR @krompir_VERSION_MINOR@
-#define VERSION_PATCH @krompir_VERSION_PATCH@
+#define KROMPIR_VERSION_MAJOR @krompir_VERSION_MAJOR@
+#define KROMPIR_VERSION_MINOR @krompir_VERSION_MINOR@
+#define KROMPIR_VERSION_PATCH @krompir_VERSION_PATCH@
 
-#define VERSION "@krompir_VERSION@"
+#define KROMPIR_VERSION "@krompir_VERSION@"
 /* clang-format on */
 /* NOLINTEND */
 
-#define BINLOG_VERSION "4cd8f78"
+#define KROMPIR_BINLOG_VERSION "4cd8f78"
 
 // App names
 #ifdef NDEBUG
-#  define APP_NAME "Krompir"
+#  define KROMPIR_APP_NAME "Krompir"
 #else
-#  define APP_NAME "kROMPIR"
+#  define KROMPIR_APP_NAME "kROMPIR"
 #endif
+
+// Logging
+#define KROMPIR_LOG_QUEUE_SIZE (1u << 20u)
 
 // NOLINTEND(modernize-macro-to-enum,cppcoreguidelines-macro-usage)
