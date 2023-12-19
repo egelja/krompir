@@ -1,5 +1,6 @@
 #include "main.hpp"
 
+#include "gui/icons.hpp"
 #include "utils/utils.hpp"
 
 #include <fmt/core.h>
@@ -30,7 +31,7 @@ MainFrame::create_menu_bar_()
 MainFrame::MainFrame(const wxString& title) : wxFrame(nullptr, wxID_ANY, title)
 {
     // set the frame icon
-    SetIcon(wxICON(sample));
+    SetIcons(icons::get_all_icons());
 
     // create a menu bar
     create_menu_bar_();

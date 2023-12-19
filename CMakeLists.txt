@@ -14,6 +14,11 @@ include(cmake/project-is-top-level.cmake)
 include(cmake/variables.cmake)
 include(cmake/functions.cmake)
 
+# ---- Enable compiler colored output ----
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fdiagnostics-color=always")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=always")
+
 # ---- Configuration File ----
 
 configure_file(src/config.h.in config.h)
@@ -38,6 +43,7 @@ target_include_directories(
     krompir_lib ${warning_guard}
     PUBLIC
     "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>"
+    "$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/misc>"
     "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/>"
 )
 
@@ -53,6 +59,7 @@ add_executable(krompir_exe
 
   # Main GUI
   src/gui/gui.cpp
+  src/gui/icons.cpp
 
   # Frames
   src/gui/frames/main.cpp
@@ -75,6 +82,10 @@ target_link_libraries_system(
   PRIVATE
   wx::net wx::core wx::base
 )
+
+if(WIN32)
+  target_sources(krompir_exe PRIVATE "misc/krompir.rc")
+endif()
 
 # ---- Install rules ----
 
