@@ -81,7 +81,7 @@ IncludeCategories:
     Priority: 1
     CaseSensitive: false
   # Headers in <> from libraries.
-  - Regex: "^(<(gsl|catch2))"
+  - Regex: "^(<(wx|catch2))"
     Priority: 2
     CaseSensitive: false
   # C headers

@@ -38,11 +38,6 @@ public:
 
         // create the main application window
         auto* frame = new MainFrame(KROMPIR_APP_NAME);
-        if (frame == nullptr) {
-            log_e(gui, "Could not allocate our main frame");
-            log_c(main, "Out of memory!");
-            return false;
-        }
 
         // and show it (the frames, unlike simple controls, are not shown when
         // created initially)
